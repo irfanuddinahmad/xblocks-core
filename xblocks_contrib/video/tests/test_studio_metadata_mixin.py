@@ -1,16 +1,15 @@
-# pylint: disable=protected-access
 """Tests for StudioMetadataMixin.editable_metadata_fields (VideoBlock)."""
 from unittest.mock import Mock, patch
 
 from django.test import SimpleTestCase
 from django.test.utils import override_settings
+from opaque_keys.edx.locator import CourseLocator
+from xblock.field_data import DictFieldData
+from xblock.fields import ScopeIds
 
 from xblocks_contrib.video.exceptions import TranscriptNotFoundError
 from xblocks_contrib.video.tests.test_utils import DummyRuntime
 from xblocks_contrib.video.video import VideoBlock
-from xblock.field_data import DictFieldData
-from xblock.fields import ScopeIds
-from opaque_keys.edx.locator import CourseLocator
 
 ALL_LANGUAGES = (
     ["en", "English"],
