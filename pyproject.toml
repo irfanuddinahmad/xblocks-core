@@ -16,7 +16,6 @@ keywords = ["Python", "edx"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
@@ -87,8 +86,18 @@ test-base = [
     "pytest-django",
     "six",
 ]
-test = [{ include-group = "test-base" }]
+# Current default Django version. When adding or retiring a Django version
+# from the matrix, update this group and [tool.uv].conflicts accordingly.
+test = [
+    { include-group = "test-base" },
+    "Django>=5.2,<6.0",
+]
+django42 = [
+    { include-group = "test-base" },
+    "Django>=4.2,<5.0",
+]
 quality = [
+    { include-group = "test" },
     "edx-lint",
     "isort",
     "pycodestyle",
@@ -96,18 +105,17 @@ quality = [
     "pylint",
 ]
 doc = [
-    { include-group = "test-base" },
+    { include-group = "test" },
     "doc8",
     "Sphinx",
     "sphinx-book-theme",
 ]
 ci = [
-    { include-group = "test" },
-    { include-group = "quality" },
     "tox",
     "tox-uv",
 ]
 dev = [
+    { include-group = "quality" },
     { include-group = "ci" },
     { include-group = "doc" },
 ]
@@ -158,6 +166,12 @@ ignore = ["D001"]
 
 [tool.uv]
 package = true
+# Each entry lists groups with mutually exclusive version requirements so uv
+# can produce a single uv.lock with a separate resolution for each.
+# Add a new pair whenever you add a legacy-version group to [dependency-groups].
+conflicts = [
+    [{ group = "test" }, { group = "django42" }],
+]
 #  DO NOT EDIT constraint-dependencies DIRECTLY.
 #  This list is managed by `edx_lint write_uv_constraints`
 #  and will be overwritten the next time `make upgrade` is run.

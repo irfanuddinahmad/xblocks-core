@@ -29,6 +29,9 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Install CI dependencies
+        run: uv sync --group ci
+
       - name: Run tests with Tox (${{ matrix.toxenv }})
         env:
           TOXENV: ${{ matrix.toxenv }}

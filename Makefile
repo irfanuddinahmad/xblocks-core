@@ -14,7 +14,7 @@ help:
 	@perl -nle'print $& if m{^[\.a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
 
 upgrade: ## update uv.lock and regenerate uv constraints from edx-lint
-	edx_lint write_uv_constraints
+	uv run --with edx-lint edx_lint write_uv_constraints pyproject.toml
 	uv lock --upgrade
 
 requirements: ## install development environment requirements using uv
