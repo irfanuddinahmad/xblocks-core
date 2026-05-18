@@ -1,0 +1,174 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xblocks-contrib"
+dynamic = ["version"]
+description = "core xblocks"
+readme = "README.rst"
+license = "AGPL-3.0"
+license-files = ["LICENSE.txt"]
+authors = [
+    { name = "Open edX Project", email = "oscm@openedx.org" }
+]
+keywords = ["Python", "edx"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4",
+    "chem",
+    "defusedxml",
+    "django",
+    "edx-codejail",
+    "edx-django-utils",
+    "edx-opaque-keys",
+    "edx-submissions",
+    "edx-toggles",
+    "edxval",
+    "fs",
+    "html5lib",
+    "lxml",
+    "markupsafe",
+    "nh3",
+    "numpy",
+    "oauthlib",
+    "openedx-calc",
+    "path",
+    "pyparsing",
+    "pytz",
+    "random2",
+    "requests",
+    "shapely",
+    "simplejson",
+    "web-fragments",
+    "webob",
+    "wrapt",
+    "xblock",
+]
+
+[project.urls]
+Homepage = "https://github.com/openedx/xblocks-contrib"
+
+[project.entry-points."xblock.v1"]
+# _extracted suffix is added for testing only.
+_annotatable_extracted = "xblocks_contrib:AnnotatableBlock"
+_discussion_extracted = "xblocks_contrib:DiscussionXBlock"
+_html_extracted = "xblocks_contrib:HtmlBlock"
+_lti_extracted = "xblocks_contrib:LTIBlock"
+_poll_question_extracted = "xblocks_contrib:PollBlock"
+_problem_extracted = "xblocks_contrib:ProblemBlock"
+_video_extracted = "xblocks_contrib:VideoBlock"
+_word_cloud_extracted = "xblocks_contrib:WordCloudBlock"
+# 'Done' XBlocks -- ones that are ready for general use today,
+# and have been migrated fully from edx-platform or their original repository.
+pdf = "xblock_pdf:PDFBlock"
+
+[project.entry-points."lms.djangoapp"]
+xblocks_contrib_problem_capa = "xblocks_contrib.problem.capa.apps:CapaAppConfig"
+xblocks_contrib_discussion = "xblocks_contrib.discussion.apps:DiscussionAppConfig"
+
+[project.entry-points."cms.djangoapp"]
+xblocks_contrib_problem_capa = "xblocks_contrib.problem.capa.apps:CapaAppConfig"
+xblocks_contrib_discussion = "xblocks_contrib.discussion.apps:DiscussionAppConfig"
+
+[dependency-groups]
+test-base = [
+    "ddt",
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+    "six",
+]
+test = [{ include-group = "test-base" }]
+quality = [
+    "edx-lint",
+    "isort",
+    "pycodestyle",
+    "pydocstyle",
+    "pylint",
+]
+doc = [
+    { include-group = "test-base" },
+    "doc8",
+    "Sphinx",
+    "sphinx-book-theme",
+]
+ci = [
+    { include-group = "test" },
+    { include-group = "quality" },
+    "tox",
+    "tox-uv",
+]
+dev = [
+    { include-group = "ci" },
+    { include-group = "doc" },
+]
+
+[tool.setuptools_scm]
+version_scheme = "only-version"
+local_scheme = "no-local-version"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["xblocks_contrib*", "xblock_pdf*"]
+exclude = ["*tests*"]
+
+[tool.edx_lint]
+uv_constraints = [
+    # Date: 2026-02-10
+    # setuptools >=80.9.0 has breaking tests. More details:
+    # https://github.com/openedx/openedx-platform/pull/37991
+    # Unpin once the issue is resolved.
+    "setuptools<=80.9.0",
+]
+
+[tool.isort]
+include_trailing_comma = true
+indent = "    "
+line_length = 120
+multi_line_output = 3
+skip = ["migrations"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "test_settings"
+django_find_project = false
+addopts = "--cov xblocks_contrib --cov xblock_pdf --cov-report term-missing --cov-report xml"
+norecursedirs = [".*", "docs", "requirements", "site-packages"]
+
+[tool.pycodestyle]
+exclude = ".git,.tox,migrations"
+max-line-length = 120
+
+[tool.pydocstyle]
+match-dir = "(?!migrations)"
+
+[tool.doc8]
+# D001 = Line too long
+ignore = ["D001"]
+
+[tool.uv]
+package = true
+#  DO NOT EDIT constraint-dependencies DIRECTLY.
+#  This list is managed by `edx_lint write_uv_constraints`
+#  and will be overwritten the next time `make upgrade` is run.
+#  - GLOBAL constraints: edit edx_lint/files/common_constraints.txt
+#  - REPO-SPECIFIC constraints: edit [tool.edx_lint].uv_constraints in this file
+constraint-dependencies = [
+    "Django<6.0",
+    "elasticsearch<7.14.0",
+    "setuptools<=80.9.0",
+]
+
+[tool.semantic_release]
+tag_format = "v{version}"
+build_command = "SETUPTOOLS_SCM_PRETEND_VERSION=$NEW_VERSION uv build"

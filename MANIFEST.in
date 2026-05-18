@@ -1,7 +1,5 @@
 # --- ROOT FILES ---
 include CHANGELOG.rst LICENSE.txt README.rst
-include requirements/base.in
-include requirements/constraints.txt
 
 # --- PACKAGE DATA ---
 recursive-include xblocks_contrib *.html *.js *.css *.jar *.png *.gif *.jpg *.jpeg *.svg *.yaml *.underscore
