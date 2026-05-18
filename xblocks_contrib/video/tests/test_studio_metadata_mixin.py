@@ -57,71 +57,56 @@ class TestEditableMetadataFieldsProperty(SimpleTestCase):
             fields['license'] = {'type': 'License', 'value': ''}
         return fields
 
-    def _get_fields(self, include_license=False, public_url=None, transcripts=None):
+    @staticmethod
+    def _service_stub(service_name, service_obj):
+        """Return a runtime.service stub that serves service_obj only for service_name."""
+        return lambda _block, name: service_obj if name == service_name else None
+
+    def _get_fields(self, include_license=False, public_url=None, transcripts=None, service=None):
         """
         Call editable_metadata_fields with standard mocks applied.
 
-        All runtime services return None (no settings service, no video_config),
-        so license checks and English-transcript lookups are skipped.
+        Pass service=<callable> to simulate a real runtime service (e.g. for
+        licensing or video_config tests); omit it to have all service calls
+        return None (skipping license and English-transcript logic).
         """
+        service_kwargs = {'side_effect': service} if service else {'return_value': None}
         with patch.object(self.block, '_get_editable_metadata_fields',
                           return_value=self._base_fields(include_license)):
             with patch.object(self.block, 'get_transcripts_info',
                               return_value={'sub': '', 'transcripts': transcripts or {}}):
                 with patch.object(self.block, 'get_public_video_url', return_value=public_url):
-                    with patch.object(self.block.runtime, 'service', return_value=None):
+                    with patch.object(self.block.runtime, 'service', **service_kwargs):
                         return self.block.editable_metadata_fields
 
     # ------------------------------------------------------------------
     # Field-level modifications
     # ------------------------------------------------------------------
 
-    def test_sub_field_is_removed(self):
-        """'sub' is deprecated and must be absent from the returned fields."""
+    def test_default_field_modifications(self):
+        """Verify all field-level changes made by editable_metadata_fields with default args."""
         fields = self._get_fields()
         assert 'sub' not in fields
-
-    def test_transcripts_custom_flag_and_type(self):
-        """'transcripts' field gets custom=True and type='VideoTranslations'."""
-        fields = self._get_fields()
         assert fields['transcripts']['custom'] is True
         assert fields['transcripts']['type'] == 'VideoTranslations'
-
-    def test_transcripts_languages_sorted_by_label(self):
-        """Language list injected into 'transcripts' must be sorted by label."""
-        fields = self._get_fields()
         assert fields['transcripts']['languages'] == [
             {'label': 'English', 'code': 'en'},
             {'label': 'Esperanto', 'code': 'eo'},
             {'label': 'Urdu', 'code': 'ur'},
         ]
+        # DummyRuntime.handler_url returns '/handler/block/handler'
+        assert fields['transcripts']['urlRoot'] == '/handler/block/handler'
+        assert fields['edx_video_id']['type'] == 'VideoID'
+        assert fields['handout']['type'] == 'FileUploader'
 
-    def test_transcripts_value_comes_from_get_transcripts_info(self):
-        """'transcripts.value' must reflect the dict returned by get_transcripts_info."""
+    def test_field_modifications_with_custom_args(self):
+        """Verify transcripts.value passthrough and public_access enrichment."""
         fields = self._get_fields(transcripts={'fr': 'french.srt'})
         assert fields['transcripts']['value'] == {'fr': 'french.srt'}
 
-    def test_transcripts_url_root_from_handler_url(self):
-        """'transcripts.urlRoot' must be built from runtime.handler_url (trailing /? stripped)."""
-        fields = self._get_fields()
-        # DummyRuntime.handler_url returns '/handler/block/handler'
-        assert fields['transcripts']['urlRoot'] == '/handler/block/handler'
-
-    def test_edx_video_id_type_is_video_id(self):
-        """'edx_video_id' type must be changed to 'VideoID'."""
-        fields = self._get_fields()
-        assert fields['edx_video_id']['type'] == 'VideoID'
-
-    def test_public_access_type_and_url(self):
-        """'public_access' type becomes 'PublicAccess' and url is set from get_public_video_url."""
         fields = self._get_fields(public_url='https://example.com/video')
         assert fields['public_access']['type'] == 'PublicAccess'
         assert fields['public_access']['url'] == 'https://example.com/video'
-
-    def test_handout_type_is_file_uploader(self):
-        """'handout' type must be changed to 'FileUploader'."""
-        fields = self._get_fields()
-        assert fields['handout']['type'] == 'FileUploader'
 
     # ------------------------------------------------------------------
     # License field handling
@@ -131,36 +116,20 @@ class TestEditableMetadataFieldsProperty(SimpleTestCase):
         """'license' is removed when the settings service reports licensing_enabled=False."""
         settings_service = Mock()
         settings_service.get_settings_bucket.return_value = {'licensing_enabled': False}
-
-        def _service(_block, name):
-            return settings_service if name == 'settings' else None
-
-        with patch.object(self.block, '_get_editable_metadata_fields',
-                          return_value=self._base_fields(include_license=True)):
-            with patch.object(self.block, 'get_transcripts_info',
-                              return_value={'sub': '', 'transcripts': {}}):
-                with patch.object(self.block, 'get_public_video_url', return_value=None):
-                    with patch.object(self.block.runtime, 'service', side_effect=_service):
-                        fields = self.block.editable_metadata_fields
-
+        fields = self._get_fields(
+            include_license=True,
+            service=self._service_stub('settings', settings_service),
+        )
         assert 'license' not in fields
 
     def test_license_kept_when_licensing_enabled(self):
         """'license' is kept when the settings service reports licensing_enabled=True."""
         settings_service = Mock()
         settings_service.get_settings_bucket.return_value = {'licensing_enabled': True}
-
-        def _service(_block, name):
-            return settings_service if name == 'settings' else None
-
-        with patch.object(self.block, '_get_editable_metadata_fields',
-                          return_value=self._base_fields(include_license=True)):
-            with patch.object(self.block, 'get_transcripts_info',
-                              return_value={'sub': '', 'transcripts': {}}):
-                with patch.object(self.block, 'get_public_video_url', return_value=None):
-                    with patch.object(self.block.runtime, 'service', side_effect=_service):
-                        fields = self.block.editable_metadata_fields
-
+        fields = self._get_fields(
+            include_license=True,
+            service=self._service_stub('settings', settings_service),
+        )
         assert 'license' in fields
 
     # ------------------------------------------------------------------
@@ -171,39 +140,32 @@ class TestEditableMetadataFieldsProperty(SimpleTestCase):
         """When video_config returns an English transcript, it is added to transcripts.value."""
         video_config = Mock()
         video_config.get_transcript.return_value = ('content', 'en_subs_id', 'txt')
-
-        def _service(_block, name):
-            return video_config if name == 'video_config' else None
-
         self.block.sub = 'some_sub_id'  # non-empty so possible_sub_ids is non-empty
-
-        with patch.object(self.block, '_get_editable_metadata_fields',
-                          return_value=self._base_fields(include_license=False)):
-            with patch.object(self.block, 'get_transcripts_info',
-                              return_value={'sub': 'some_sub_id', 'transcripts': {}}):
-                with patch.object(self.block, 'get_public_video_url', return_value=None):
-                    with patch.object(self.block.runtime, 'service', side_effect=_service):
-                        fields = self.block.editable_metadata_fields
-
+        fields = self._get_fields(
+            transcripts={},
+            service=self._service_stub('video_config', video_config),
+        )
         assert fields['transcripts']['value'] == {'en': 'en_subs_id'}
+
+    def test_english_transcript_merged_with_existing_transcripts(self):
+        """English transcript from video_config is merged with, not replacing, existing transcripts."""
+        video_config = Mock()
+        video_config.get_transcript.return_value = ('content', 'en_subs_id', 'txt')
+        self.block.sub = 'some_sub_id'
+        fields = self._get_fields(
+            transcripts={'fr': 'french.srt'},
+            service=self._service_stub('video_config', video_config),
+        )
+        assert fields['transcripts']['value'] == {'fr': 'french.srt', 'en': 'en_subs_id'}
 
     def test_transcript_not_found_leaves_value_unchanged(self):
         """When video_config raises TranscriptNotFoundError, transcripts.value is not modified."""
         video_config = Mock()
         video_config.get_transcript.side_effect = TranscriptNotFoundError
-
-        def _service(_block, name):
-            return video_config if name == 'video_config' else None
-
         self.block.sub = 'some_sub_id'
-
-        with patch.object(self.block, '_get_editable_metadata_fields',
-                          return_value=self._base_fields(include_license=False)):
-            with patch.object(self.block, 'get_transcripts_info',
-                              return_value={'sub': 'some_sub_id', 'transcripts': {'fr': 'french.srt'}}):
-                with patch.object(self.block, 'get_public_video_url', return_value=None):
-                    with patch.object(self.block.runtime, 'service', side_effect=_service):
-                        fields = self.block.editable_metadata_fields
-
+        fields = self._get_fields(
+            transcripts={'fr': 'french.srt'},
+            service=self._service_stub('video_config', video_config),
+        )
         assert 'en' not in fields['transcripts']['value']
         assert fields['transcripts']['value'] == {'fr': 'french.srt'}
