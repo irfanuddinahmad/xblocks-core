@@ -6,7 +6,7 @@
 #
 build==1.5.0
     # via pip-tools
-click==8.3.3
+click==8.4.0
     # via pip-tools
 packaging==26.2
     # via
@@ -24,7 +24,7 @@ wheel==0.47.0
     #   pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
-pip==26.1
+pip==26.1.1
     # via
     #   -r requirements/pip-tools.in
     #   pip-tools
