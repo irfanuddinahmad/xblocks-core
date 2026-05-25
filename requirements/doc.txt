@@ -24,12 +24,12 @@ beautifulsoup4==4.14.3
     # via
     #   -r requirements/test.txt
     #   pydata-sphinx-theme
-cachetools==7.1.2
+cachetools==7.1.4
     # via
     #   -r requirements/test.txt
     #   edxval
     #   tox
-certifi==2026.4.22
+certifi==2026.5.20
     # via
     #   -r requirements/test.txt
     #   requests
@@ -48,7 +48,7 @@ charset-normalizer==3.4.7
     #   requests
 chem==2.0.0
     # via -r requirements/test.txt
-click==8.4.0
+click==8.4.1
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -177,7 +177,7 @@ fs==2.4.16
     #   xblock
 html5lib==1.1
     # via -r requirements/test.txt
-idna==3.15
+idna==3.16
     # via
     #   -r requirements/test.txt
     #   requests
@@ -200,7 +200,7 @@ jsonfield==3.2.0
     # via
     #   -r requirements/test.txt
     #   edx-submissions
-lxml==6.1.0
+lxml==6.1.1
     # via
     #   -r requirements/test.txt
     #   edxval
@@ -228,7 +228,7 @@ nltk==3.9.4
     # via
     #   -r requirements/test.txt
     #   chem
-numpy==2.4.5
+numpy==2.4.6
     # via
     #   -r requirements/test.txt
     #   chem
@@ -282,7 +282,7 @@ pygments==2.20.0
     #   pydata-sphinx-theme
     #   pytest
     #   sphinx
-pyjwt[crypto]==2.12.1
+pyjwt[crypto]==2.13.0
     # via
     #   -r requirements/test.txt
     #   drf-jwt
@@ -378,9 +378,9 @@ six==1.17.0
     #   fs
     #   html5lib
     #   python-dateutil
-snowballstemmer==3.0.1
+snowballstemmer==3.1.0
     # via sphinx
-soupsieve==2.8.3
+soupsieve==2.8.4
     # via
     #   -r requirements/test.txt
     #   beautifulsoup4
@@ -407,7 +407,7 @@ sqlparse==0.5.5
     # via
     #   -r requirements/test.txt
     #   django
-stevedore==5.7.0
+stevedore==5.8.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -458,7 +458,7 @@ webob==1.8.9
     # via
     #   -r requirements/test.txt
     #   xblock
-wrapt==2.1.2
+wrapt==2.2.1
     # via -r requirements/test.txt
 xblock==6.1.0
     # via -r requirements/test.txt

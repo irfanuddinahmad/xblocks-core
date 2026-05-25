@@ -10,9 +10,9 @@ asgiref==3.11.1
     # via django
 beautifulsoup4==4.14.3
     # via -r requirements/base.in
-cachetools==7.1.2
+cachetools==7.1.4
     # via edxval
-certifi==2026.4.22
+certifi==2026.5.20
     # via requests
 cffi==2.0.0
     # via
@@ -24,7 +24,7 @@ charset-normalizer==3.4.7
     # via requests
 chem==2.0.0
     # via -r requirements/base.in
-click==8.4.0
+click==8.4.1
     # via
     #   code-annotations
     #   edx-django-utils
@@ -107,7 +107,7 @@ fs==2.4.16
     #   xblock
 html5lib==1.1
     # via -r requirements/base.in
-idna==3.15
+idna==3.16
     # via requests
 jinja2==3.1.6
     # via code-annotations
@@ -115,7 +115,7 @@ joblib==1.5.3
     # via nltk
 jsonfield==3.2.0
     # via edx-submissions
-lxml==6.1.0
+lxml==6.1.1
     # via
     #   -r requirements/base.in
     #   edxval
@@ -137,7 +137,7 @@ nh3==0.3.5
     # via -r requirements/base.in
 nltk==3.9.4
     # via chem
-numpy==2.4.5
+numpy==2.4.6
     # via
     #   -r requirements/base.in
     #   chem
@@ -156,7 +156,7 @@ psutil==7.2.2
     # via edx-django-utils
 pycparser==3.0
     # via cffi
-pyjwt[crypto]==2.12.1
+pyjwt[crypto]==2.13.0
     # via
     #   drf-jwt
     #   edx-drf-extensions
@@ -210,11 +210,11 @@ six==1.17.0
     #   fs
     #   html5lib
     #   python-dateutil
-soupsieve==2.8.3
+soupsieve==2.8.4
     # via beautifulsoup4
 sqlparse==0.5.5
     # via django
-stevedore==5.7.0
+stevedore==5.8.0
     # via
     #   code-annotations
     #   edx-django-utils
@@ -241,7 +241,7 @@ webob==1.8.9
     # via
     #   -r requirements/base.in
     #   xblock
-wrapt==2.1.2
+wrapt==2.2.1
     # via -r requirements/base.in
 xblock==6.1.0
     # via -r requirements/base.in

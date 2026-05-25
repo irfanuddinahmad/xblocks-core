@@ -27,13 +27,13 @@ build==1.5.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-cachetools==7.1.2
+cachetools==7.1.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edxval
     #   tox
-certifi==2026.4.22
+certifi==2026.5.20
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -58,7 +58,7 @@ chem==2.0.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-click==8.4.0
+click==8.4.1
     # via
     #   -r requirements/pip-tools.txt
     #   -r requirements/quality.txt
@@ -227,7 +227,7 @@ html5lib==1.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-idna==3.15
+idna==3.16
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -256,7 +256,7 @@ jsonfield==3.2.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-submissions
-lxml==6.1.0
+lxml==6.1.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -295,7 +295,7 @@ nltk==3.9.4
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   chem
-numpy==2.4.5
+numpy==2.4.6
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -366,7 +366,7 @@ pygments==2.20.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest
-pyjwt[crypto]==2.12.1
+pyjwt[crypto]==2.13.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -509,11 +509,11 @@ six==1.17.0
     #   fs
     #   html5lib
     #   python-dateutil
-snowballstemmer==3.0.1
+snowballstemmer==3.1.0
     # via
     #   -r requirements/quality.txt
     #   pydocstyle
-soupsieve==2.8.3
+soupsieve==2.8.4
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -523,7 +523,7 @@ sqlparse==0.5.5
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   django
-stevedore==5.7.0
+stevedore==5.8.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -594,7 +594,7 @@ wheel==0.47.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-wrapt==2.1.2
+wrapt==2.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
