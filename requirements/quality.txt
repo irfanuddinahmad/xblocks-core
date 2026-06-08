@@ -16,7 +16,7 @@ astroid==4.0.4
     # via
     #   pylint
     #   pylint-celery
-beautifulsoup4==4.14.3
+beautifulsoup4==4.15.0
     # via -r requirements/test.txt
 cachetools==7.1.4
     # via
@@ -75,11 +75,11 @@ defusedxml==0.7.1
     # via -r requirements/test.txt
 dill==0.4.1
     # via pylint
-distlib==0.4.0
+distlib==0.4.1
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==5.2.14
+django==5.2.15
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
@@ -160,7 +160,7 @@ edx-toggles==6.0.0
     #   edxval
 edxval==4.0.1
     # via -r requirements/test.txt
-filelock==3.29.0
+filelock==3.29.1
     # via
     #   -r requirements/test.txt
     #   python-discovery
@@ -172,7 +172,7 @@ fs==2.4.16
     #   xblock
 html5lib==1.1
     # via -r requirements/test.txt
-idna==3.17
+idna==3.18
     # via
     #   -r requirements/test.txt
     #   requests
@@ -384,7 +384,7 @@ six==1.17.0
     #   fs
     #   html5lib
     #   python-dateutil
-snowballstemmer==3.1.0
+snowballstemmer==3.1.1
     # via pydocstyle
 soupsieve==2.8.4
     # via
@@ -416,9 +416,9 @@ tomlkit==0.15.0
     # via
     #   edx-lint
     #   pylint
-tox==4.55.0
+tox==4.55.1
     # via -r requirements/test.txt
-tqdm==4.67.3
+tqdm==4.68.1
     # via
     #   -r requirements/test.txt
     #   nltk
@@ -443,7 +443,7 @@ webencodings==0.5.1
     # via
     #   -r requirements/test.txt
     #   html5lib
-webob==1.8.9
+webob==1.8.10
     # via
     #   -r requirements/test.txt
     #   xblock
