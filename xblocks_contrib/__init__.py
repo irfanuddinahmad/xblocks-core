@@ -9,4 +9,4 @@ from .problem import ProblemBlock
 from .video import VideoBlock
 from .word_cloud import WordCloudBlock
 
-__version__ = "0.16.1"
+__version__ = "0.17.0"

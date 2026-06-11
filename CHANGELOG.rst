@@ -14,11 +14,20 @@ Change Log
 Unreleased
 **********
 
+0.17.0 - 2026-06-11
+
+Changed
+=======
+
+* Upgrade XBlock dependency and remove web-fragments dependency in favor of
+  XBlock's packaging of this module.
+
 0.16.0 - 2026-04-21
 **********************************************
 
 Fixed
 =====
+
 * Fix video block editor issues while editing in the Content Library
 
 0.16.0 - 2026-04-21
