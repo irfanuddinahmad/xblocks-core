@@ -89,7 +89,7 @@ coverage[toml]==7.14.1
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==48.0.0
+cryptography==48.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -106,7 +106,7 @@ dill==0.4.1
     # via
     #   -r requirements/quality.txt
     #   pylint
-distlib==0.4.1
+distlib==0.4.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -198,6 +198,7 @@ edx-opaque-keys==4.0.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
+    #   xblock
 edx-submissions==4.0.0
     # via
     #   -r requirements/quality.txt
@@ -211,7 +212,7 @@ edxval==4.0.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-filelock==3.29.1
+filelock==3.29.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -442,7 +443,7 @@ python-dateutil==2.9.0.post0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   xblock
-python-discovery==1.4.0
+python-discovery==1.4.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -554,7 +555,7 @@ tox==4.55.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-tqdm==4.68.1
+tqdm==4.68.2
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
@@ -570,16 +571,11 @@ urllib3==2.7.0
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   requests
-virtualenv==21.4.2
+virtualenv==21.4.3
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
     #   tox
-web-fragments==4.0.0
-    # via
-    #   -r requirements/quality.txt
-    #   -r requirements/test.txt
-    #   xblock
 webencodings==0.5.1
     # via
     #   -r requirements/quality.txt
@@ -598,7 +594,7 @@ wrapt==2.2.1
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt
-xblock==6.1.0
+xblock==6.2.0
     # via
     #   -r requirements/quality.txt
     #   -r requirements/test.txt

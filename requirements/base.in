@@ -26,7 +26,6 @@ random2
 requests
 shapely
 simplejson
-web-fragments
 webob
 wrapt
 xblock

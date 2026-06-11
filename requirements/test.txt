@@ -52,7 +52,7 @@ colorama==0.4.6
     # via tox
 coverage[toml]==7.14.1
     # via pytest-cov
-cryptography==48.0.0
+cryptography==48.0.1
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -60,7 +60,7 @@ ddt==1.7.2
     # via -r requirements/test.in
 defusedxml==0.7.1
     # via -r requirements/base.txt
-distlib==0.4.1
+distlib==0.4.2
     # via virtualenv
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
@@ -132,6 +132,7 @@ edx-opaque-keys==4.0.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
+    #   xblock
 edx-submissions==4.0.0
     # via -r requirements/base.txt
 edx-toggles==6.0.0
@@ -140,7 +141,7 @@ edx-toggles==6.0.0
     #   edxval
 edxval==4.0.1
     # via -r requirements/base.txt
-filelock==3.29.1
+filelock==3.29.3
     # via
     #   python-discovery
     #   tox
@@ -276,7 +277,7 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.txt
     #   xblock
-python-discovery==1.4.0
+python-discovery==1.4.2
     # via
     #   tox
     #   virtualenv
@@ -354,7 +355,7 @@ tomli-w==1.2.0
     # via tox
 tox==4.55.1
     # via -r requirements/test.in
-tqdm==4.68.1
+tqdm==4.68.2
     # via
     #   -r requirements/base.txt
     #   nltk
@@ -367,12 +368,8 @@ urllib3==2.7.0
     # via
     #   -r requirements/base.txt
     #   requests
-virtualenv==21.4.2
+virtualenv==21.4.3
     # via tox
-web-fragments==4.0.0
-    # via
-    #   -r requirements/base.txt
-    #   xblock
 webencodings==0.5.1
     # via
     #   -r requirements/base.txt
@@ -383,7 +380,7 @@ webob==1.8.10
     #   xblock
 wrapt==2.2.1
     # via -r requirements/base.txt
-xblock==6.1.0
+xblock==6.2.0
     # via -r requirements/base.txt
 
 # The following packages are considered to be unsafe in a requirements file:
