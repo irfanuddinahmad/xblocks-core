@@ -19,7 +19,7 @@ cachetools==7.1.4
     #   -r requirements/base.txt
     #   edxval
     #   tox
-certifi==2026.5.20
+certifi==2026.6.17
     # via
     #   -r requirements/base.txt
     #   requests
@@ -50,7 +50,7 @@ code-annotations==3.0.0
     #   edx-toggles
 colorama==0.4.6
     # via tox
-coverage[toml]==7.14.1
+coverage[toml]==7.14.2
     # via pytest-cov
 cryptography==49.0.0
     # via
@@ -198,7 +198,7 @@ nltk==3.9.4
     # via
     #   -r requirements/base.txt
     #   chem
-numpy==2.4.6
+numpy==2.5.0
     # via
     #   -r requirements/base.txt
     #   chem
@@ -264,7 +264,7 @@ pysrt==1.1.2
     # via
     #   -r requirements/base.txt
     #   edxval
-pytest==9.1.0
+pytest==9.1.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -306,7 +306,7 @@ requests==2.34.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-scipy==1.17.1
+scipy==1.18.0
     # via
     #   -r requirements/base.txt
     #   chem
@@ -355,7 +355,7 @@ tomli-w==1.2.0
     # via tox
 tox==4.55.1
     # via -r requirements/test.in
-tqdm==4.68.2
+tqdm==4.68.3
     # via
     #   -r requirements/base.txt
     #   nltk
@@ -368,7 +368,7 @@ urllib3==2.7.0
     # via
     #   -r requirements/base.txt
     #   requests
-virtualenv==21.5.0
+virtualenv==21.5.1
     # via tox
 webencodings==0.5.1
     # via
@@ -378,7 +378,7 @@ webob==1.8.10
     # via
     #   -r requirements/base.txt
     #   xblock
-wrapt==2.2.1
+wrapt==2.2.2
     # via -r requirements/base.txt
 xblock==6.3.0
     # via -r requirements/base.txt
