@@ -8,7 +8,7 @@
         waitForPlaying = function(state, done) {
             jasmine.waitUntil(function() {
                 return state.el.hasClass('is-playing');
-            }).done(done);
+            }).always(done);
         };
 
         beforeEach(function() {

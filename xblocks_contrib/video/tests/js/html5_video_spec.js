@@ -123,7 +123,7 @@
 
                         jasmine.waitUntil(function() {
                             return state.videoPlayer.player.getPlayerState() !== STATUS.UNSTARTED;
-                        }).done(done);
+                        }).always(done);
 
                         state.videoPlayer.player.pauseVideo();
                     });
@@ -173,7 +173,7 @@
                         state.videoPlayer.player.playVideo();
                         jasmine.waitUntil(function() {
                             return state.videoPlayer.player.getPlayerState() !== STATUS.UNSTARTED;
-                        }).done(done);
+                        }).always(done);
                     });
 
                     it('player state was changed', function() {
@@ -210,7 +210,7 @@
                         }).then(function() {
                             state.videoPlayer.player.seekTo(2);
                             expect(state.videoPlayer.player.getCurrentTime()).toBe(2);
-                        }).done(done);
+                        }).always(done);
                     });
 
                     it('set new incorrect values', function() {
@@ -249,7 +249,7 @@
                         state.videoPlayer.player.video.currentTime = 3;
                         expect(state.videoPlayer.player.getCurrentTime())
                             .toBe(state.videoPlayer.player.video.currentTime);
-                    }).done(done);
+                    }).always(done);
                 });
 
                 it('playVideo', function() {
@@ -319,7 +319,7 @@
                         var logs = state.videoPlayer.player._getLogs();
                         expect(logs).toEqual(jasmine.any(Array));
                         expect(logs.length).toBeGreaterThan(0);
-                    }).done(done);
+                    }).always(done);
                 });
             });
 

@@ -32,7 +32,7 @@
             $('.btn-play').click();
             jasmine.waitUntil(function() {
                 return state.el.hasClass('is-playing');
-            }).done(done);
+            }).always(done);
         });
 
         it('destroy itself on "play" event', function() {
