@@ -1,12 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 describe("Problem", function () {
   const problem_content_default = readFixtures("problem_content.html");
-  var mockRuntime = {};
+  const mockRuntime = {};
 
   beforeEach(function () {
     // Stub MathJax
@@ -37,7 +31,7 @@ describe("Problem", function () {
 
   describe("constructor", function () {
     it("set the element from html", function () {
-      this.problem999 = new Problem(mockRuntime,`\
+      this.problem999 = new Problem(mockRuntime, `\
 <section class='xblock xblock-student_view xmodule_display xmodule_CapaModule' data-type='Problem'> \
 <section id='problem_999' \
 class='problems-wrapper' \

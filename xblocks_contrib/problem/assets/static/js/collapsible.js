@@ -1,121 +1,74 @@
-// eslint-disable-next-line no-shadow-restricted-names
-(function (undefined) {
-  "use strict";
+const Collapsible = {
+  setCollapsibles,
+  toggleFull,
+  toggleHint,
+};
 
-  // [module Collapsible]
-  //
-  // [description]
-  //     Set of library functions that provide a simple way to add
-  //     collapsible functionality to elements.
-  this.Collapsible = {
-    setCollapsibles: setCollapsibles,
-    toggleFull: toggleFull,
-    toggleHint: toggleHint,
-  };
+function setCollapsibles(el) {
+  const linkTop = '<a href="#" class="full full-top">See full output</a>';
+  const linkBottom = '<a href="#" class="full full-bottom">See full output</a>';
 
-  // eslint-disable-next-line no-useless-return
-  return;
+  // Standard longform + shortfom pattern.
+  el.find(".longform").hide();
+  el.find(".shortform").append(linkTop, linkBottom); // xss-lint: disable=javascript-jquery-append
 
-  // [function setCollapsibles]
-  //
-  // [description]
-  //     Scan element's content for generic collapsible containers.
-  //
-  // [params]
-  //     el: container
-  function setCollapsibles(el) {
-    var linkBottom, linkTop, short_custom;
+  // Custom longform + shortform text pattern.
+  const short_custom = el.find(".shortform-custom");
 
-    linkTop = '<a href="#" class="full full-top">See full output</a>';
-    linkBottom = '<a href="#" class="full full-bottom">See full output</a>';
+  // Set up each one individually.
+  short_custom.each(function (index, elt) {
+    const open_text = $(elt).data("open-text");
+    const close_text = $(elt).data("close-text");
+    edx.HtmlUtils.append(
+      $(elt),
+      edx.HtmlUtils.joinHtml(
+        edx.HtmlUtils.HTML("<a href='#' class='full-custom'>"),
+        gettext(open_text),
+        edx.HtmlUtils.HTML("</a>"),
+      ),
+    );
 
-    // Standard longform + shortfom pattern.
-    el.find(".longform").hide();
-    el.find(".shortform").append(linkTop, linkBottom); // xss-lint: disable=javascript-jquery-append
+    $(elt)
+      .find(".full-custom")
+      .click(function (event) {
+        Collapsible.toggleFull(event, open_text, close_text);
+      });
+  });
 
-    // Custom longform + shortform text pattern.
-    short_custom = el.find(".shortform-custom");
+  // Collapsible pattern.
+  el.find(".collapsible header + section").hide();
 
-    // Set up each one individually.
-    short_custom.each(function (index, elt) {
-      var close_text, open_text;
+  // Set up triggers.
+  el.find(".full").click(function (event) {
+    Collapsible.toggleFull(event, "See full output", "Hide output");
+  });
+  el.find(".collapsible header a").click(Collapsible.toggleHint);
+}
 
-      open_text = $(elt).data("open-text");
-      close_text = $(elt).data("close-text");
-      edx.HtmlUtils.append(
-        $(elt),
-        edx.HtmlUtils.joinHtml(
-          edx.HtmlUtils.HTML("<a href='#' class='full-custom'>"),
-          gettext(open_text),
-          edx.HtmlUtils.HTML("</a>"),
-        ),
-      );
+function toggleFull(event, open_text, close_text) {
+  event.preventDefault();
 
-      $(elt)
-        .find(".full-custom")
-        .click(function (event) {
-          Collapsible.toggleFull(event, open_text, close_text);
-        });
-    });
+  const parent = $(event.target).parent();
+  parent.siblings().slideToggle();
+  parent.parent().toggleClass("open");
 
-    // Collapsible pattern.
-    el.find(".collapsible header + section").hide();
+  const new_text = $(event.target).text() === open_text ? close_text : open_text;
 
-    // Set up triggers.
-    el.find(".full").click(function (event) {
-      Collapsible.toggleFull(event, "See full output", "Hide output");
-    });
-    el.find(".collapsible header a").click(Collapsible.toggleHint);
+  let $el;
+  if ($(event.target).hasClass("full")) {
+    $el = parent.find(".full");
+  } else {
+    $el = $(event.target);
   }
 
-  // [function toggleFull]
-  //
-  // [description]
-  //     Toggle the display of full text for a collapsible element.
-  //
-  // [params]
-  //     event: jQuery event object associated with the event that
-  //         triggered this callback function.
-  //     open_text: text that should be displayed when the collapsible
-  //         is open.
-  //     close_text: text that should be displayed when the collapsible
-  //         is closed.
-  function toggleFull(event, open_text, close_text) {
-    var $el, new_text, parent;
+  $el.text(new_text);
+}
 
-    event.preventDefault();
+function toggleHint(event) {
+  event.preventDefault();
 
-    parent = $(event.target).parent();
-    parent.siblings().slideToggle();
-    parent.parent().toggleClass("open");
+  $(event.target).parent().siblings().slideToggle();
+  $(event.target).parent().parent().toggleClass("open");
+}
 
-    if ($(event.target).text() === open_text) {
-      new_text = close_text;
-    } else {
-      new_text = open_text;
-    }
-
-    if ($(event.target).hasClass("full")) {
-      $el = parent.find(".full");
-    } else {
-      $el = $(event.target);
-    }
-
-    $el.text(new_text);
-  }
-
-  // [function toggleHint]
-  //
-  // [description]
-  //     Toggle the collapsible open to show the hint.
-  //
-  // [params]
-  //     event: jQuery event object associated with the event that
-  //         triggered this callback function.
-  function toggleHint(event) {
-    event.preventDefault();
-
-    $(event.target).parent().siblings().slideToggle();
-    $(event.target).parent().parent().toggleClass("open");
-  }
-}).call(this);
+window.Collapsible = Collapsible;
