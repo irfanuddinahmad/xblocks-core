@@ -98,29 +98,28 @@ class TestWordCloudBlock(TestCase):
         (see openedx/openedx-platform#38745). The pre-seeded ``all_words``/``top_words`` state and
         all assertions are kept so that the merge of a student's words into existing counts is covered.
         """
-        self.block.all_words = {'cat': 10, 'dog': 5, 'mom': 1, 'dad': 2}
-        self.block.top_words = {'cat': 10, 'dog': 5, 'dad': 2}
+        self.block.all_words = {"cat": 10, "dog": 5, "mom": 1, "dad": 2}
+        self.block.top_words = {"cat": 10, "dog": 5, "dad": 2}
         self.block.submitted = False
 
         # The extracted Word Cloud XBlock uses @XBlock.json_handler for handling AJAX requests.
         # It expects a standard Python dictionary as POST data and returns a JSON object in response.
-        post_data = {'student_words': ['cat', 'cat', 'dog', 'sun']}
+        post_data = {"student_words": ["cat", "cat", "dog", "sun"]}
         response = self.block.submit_state(post_data)
-        assert response['status'] == 'success'
-        assert response['submitted'] is True
-        assert response['total_count'] == 22
-        self.assertDictEqual(
-            response['student_words'],
-            {'sun': 1, 'dog': 6, 'cat': 12}
-        )
+        assert response["status"] == "success"
+        assert response["submitted"] is True
+        assert response["total_count"] == 22
+        self.assertDictEqual(response["student_words"], {"sun": 1, "dog": 6, "cat": 12})
 
         self.assertListEqual(
-            response['top_words'],
-            [{'text': 'cat', 'size': 12, 'percent': 55.0},
-             {'text': 'dad', 'size': 2, 'percent': 9.0},
-             {'text': 'dog', 'size': 6, 'percent': 27.0},
-             {'text': 'mom', 'size': 1, 'percent': 5.0},
-             {'text': 'sun', 'size': 1, 'percent': 4.0}]
+            response["top_words"],
+            [
+                {"text": "cat", "size": 12, "percent": 55.0},
+                {"text": "dad", "size": 2, "percent": 9.0},
+                {"text": "dog", "size": 6, "percent": 27.0},
+                {"text": "mom", "size": 1, "percent": 5.0},
+                {"text": "sun", "size": 1, "percent": 4.0},
+            ],
         )
 
-        assert 100.0 == sum(i['percent'] for i in response['top_words'])
+        assert 100.0 == sum(i["percent"] for i in response["top_words"])
