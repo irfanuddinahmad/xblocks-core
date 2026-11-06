@@ -1408,6 +1408,49 @@ class FormulaEquationTest(unittest.TestCase):
         assert "error" in response
         assert response["error"] == "Error while rendering preview"
 
+    # The tests below replace tests that openedx/openedx-platform#33555 (MathJax v4) added to
+    # xmodule/js/spec/capa/display_spec.js for the built-in block's client-side ``refreshMath``
+    # formula-equation preview. openedx/openedx-platform#38751 removes that code. The extracted block
+    # renders formula-equation previews only through the server (``preview_formcalc``, used by
+    # formula_equation_preview.js; see 989ae32), so these assert that path's behavior instead.
+
+    def _preview(self, formula):
+        """Request a server-rendered preview for ``formula``."""
+        return self.the_input.handle_ajax("preview_formcalc", {"formula": formula, "request_start": 1})
+
+    def test_formcalc_ajax_calculator_syntax_renders_as_latex(self):
+        """
+        Calculator syntax is rendered as LaTeX by the server.
+
+        Replaces platform display_spec "wraps calculator syntax in backticks for formulaequationinput".
+        """
+        response = self._preview("R_1*R_2/R_3")
+        assert response["error"] == ""
+        assert response["preview"] == "\\frac{R_{1}\\cdot R_{2}}{R_{3}}"
+
+    def _assert_delimited_input_rejected(self, formula):
+        """TeX-delimited input is not valid calculator syntax, so the server reports a parse error."""
+        response = self._preview(formula)
+        assert response["preview"] == ""
+        assert response["error"] == "Sorry, couldn't parse formula"
+        assert response["formula"] == formula
+
+    def test_formcalc_ajax_inline_tex_delimiters_rejected(self):
+        """Replaces platform display_spec "preserves explicit TeX delimiters \\(...\\)"."""
+        self._assert_delimited_input_rejected("\\(E=mc^2\\)")
+
+    def test_formcalc_ajax_display_tex_delimiters_rejected(self):
+        """Replaces platform display_spec "preserves display math TeX delimiters \\[\\]"."""
+        self._assert_delimited_input_rejected("\\[E=mc^2\\]")
+
+    def test_formcalc_ajax_double_dollar_delimiters_rejected(self):
+        """Replaces platform display_spec "preserves double-dollar delimiters"."""
+        self._assert_delimited_input_rejected("$$E=mc^2$$")
+
+    def test_formcalc_ajax_single_dollar_delimiters_rejected(self):
+        """Replaces platform display_spec "preserves single-dollar delimiters"."""
+        self._assert_delimited_input_rejected("$E=mc^2$")
+
 
 class DragAndDropTest(unittest.TestCase):
     """
