@@ -1084,6 +1084,58 @@ data-url='/problem/quiz/'> \
     });
   });
 
+  // Ported from openedx-platform xmodule/js/spec/capa/display_spec.js (added in the MathJax v4
+  // upgrade, openedx/openedx-platform#33555), which openedx/openedx-platform#38751 removes along with
+  // the built-in Problem block. Names, bodies and assertions are unchanged except for the
+  // Problem(runtime, element) constructor used by the extracted block.
+  describe("refreshMath", function () {
+    beforeEach(function () {
+      this.problem = new Problem(mockRuntime, $(".xblock-student_view"));
+      MathJax.typesetClear.calls.reset();
+      MathJax.typesetPromise.calls.reset();
+      MathJax.startup.document.getMathItemsWithin.calls.reset();
+      MathJax.startup.document.getMathItemsWithin.and.returnValue([this.stubbedJax]);
+      $("#input_example_1").val("E=mc^2");
+      this.problem.refreshMath({ target: $("#input_example_1").get(0) });
+    });
+
+    it("should clear and typeset the math element", function () {
+      var math = document.querySelector("#display_example_1");
+      expect(MathJax.typesetClear).toHaveBeenCalledWith([math]);
+      expect(MathJax.typesetPromise).toHaveBeenCalledWith([math]);
+    });
+
+    it("wraps calculator input in backticks for input.math", function () {
+      var math = document.querySelector("#display_example_1");
+      expect(math.textContent).toBe("`E=mc^2`");
+    });
+  });
+
+  describe("refreshMath formula and delimiter handling", function () {
+    var formulaHTML = '' +
+      '<div id="formulaequationinput_test" class="inputtype formulaequationinput">' +
+      '  <input type="text" id="input_test_fe" data-input-id="test_fe" value="">' +
+      '  <div id="input_test_fe_preview" class="equation"></div>' +
+      '</div>';
+
+    beforeEach(function () {
+      this.problem = new Problem(mockRuntime, $(".xblock-student_view"));
+      MathJax.typesetClear.calls.reset();
+      MathJax.typesetPromise.calls.reset();
+      MathJax.startup.document.getMathItemsWithin.calls.reset();
+      MathJax.startup.document.getMathItemsWithin.and.returnValue([this.stubbedJax]);
+      this.problem.el.find(".problem").prepend(formulaHTML);
+    });
+
+    it("clears preview and skips typesetPromise on empty input", function () {
+      $("#input_test_fe").val("");
+      this.problem.refreshMath({ target: $("#input_test_fe").get(0) });
+      var math = document.querySelector("#input_test_fe_preview");
+      expect(math.textContent).toBe("");
+      expect(MathJax.typesetPromise).not.toHaveBeenCalled();
+    });
+  });
+
   describe("updateMathML", function () {
     beforeEach(function () {
       this.problem = new Problem(mockRuntime, $(".xblock-student_view"));
