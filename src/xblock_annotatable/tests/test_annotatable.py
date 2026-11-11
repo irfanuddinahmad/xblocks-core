@@ -159,3 +159,28 @@ class AnnotatableBlockTestCase(unittest.TestCase):
         self.assertEqual(response_body["result"], "success")
         self.assertEqual(self.annotatable.display_name, "New Display Name")
         self.assertEqual(self.annotatable.data, self.sample_xml)
+
+    def _block_with_data(self, data):
+        runtime = TestRuntime()
+        scope_ids = ScopeIds("user_id", "block_type", "block_id", "context_key")
+        return AnnotatableBlock(runtime, DictFieldData({"data": data}), scope_ids)
+
+    def test_get_html_with_empty_data(self):
+        """
+        A block with empty ``data`` (e.g. a bare ``<annotatable/>`` just created in a
+        content library) renders as empty content instead of raising XMLSyntaxError.
+        """
+        for data in ("", "   \n"):
+            block = self._block_with_data(data)
+            context = block.get_html()
+            assert context["instructions_html"] is None
+            assert context["content_html"] == "<div/>"
+
+    def test_bare_element_from_xml_renders(self):
+        """
+        ``definition_from_xml`` maps a bare ``<annotatable/>`` to empty ``data``; that
+        block must still render (the content-library "create new component" flow).
+        """
+        definition, _children = AnnotatableBlock.definition_from_xml(etree.fromstring("<annotatable/>"), None)
+        block = self._block_with_data(definition["data"])
+        assert block.get_html()["content_html"] == "<div/>"

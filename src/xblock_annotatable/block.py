@@ -149,10 +149,23 @@ class AnnotatableBlock(LegacyXmlMixin, XBlock):
                 delete_key = value["_delete"]
                 del el.attrib[delete_key]
 
+    def _get_xmltree(self):
+        """
+        Parse ``self.data`` into an element tree.
+
+        A bare ``<annotatable/>`` (e.g. a block just created in a content library) is
+        stored with empty ``data`` by ``definition_from_xml``. Treat that as an empty
+        annotatable instead of failing with ``XMLSyntaxError: Document is empty``,
+        matching the built-in block, which rendered such blocks as empty content.
+        """
+        if not (self.data or "").strip():
+            return etree.Element("annotatable")
+        return etree.fromstring(self.data)
+
     def _render_content(self):
         """Renders annotatable content with annotation spans and returns HTML."""
 
-        xmltree = etree.fromstring(self.data)
+        xmltree = self._get_xmltree()
         self._extract_instructions(xmltree)
 
         xmltree.tag = "div"
@@ -180,7 +193,7 @@ class AnnotatableBlock(LegacyXmlMixin, XBlock):
         return {
             "element_id": uuid.uuid1(0),
             "display_name": self.display_name,
-            "instructions_html": self._extract_instructions(etree.fromstring(self.data)),
+            "instructions_html": self._extract_instructions(self._get_xmltree()),
             "content_html": self._render_content(),
         }
 
