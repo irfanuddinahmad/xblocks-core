@@ -108,6 +108,7 @@ class WordCloudBlock(StudioEditableXBlockMixin, LegacyXmlMixin, XBlock):
             ),
         ]
 
+    @XBlock.supports("multi_device")
     def student_view(self, context=None):  # pylint: disable=W0613
         """
         Create primary view of the WordCloudXBlock, shown to students when viewing courses.

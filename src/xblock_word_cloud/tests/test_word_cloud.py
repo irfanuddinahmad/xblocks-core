@@ -33,6 +33,15 @@ class TestWordCloudBlock(TestCase):
             "XBlock did not render correct student view",
         )
 
+    def test_student_view_supports_multi_device(self):
+        """
+        student_view supports multi_device, so mobile apps render the block inline.
+
+        The built-in openedx-platform block declared this (``xmodule/word_cloud_block.py``),
+        and the mobile course blocks API reports it as ``student_view_multi_device``.
+        """
+        self.assertTrue(self.block.has_support(self.block.student_view, "multi_device"))
+
     def test_good_word(self):
         self.assertEqual(self.block.good_word("  Test  "), "test")
         self.assertEqual(self.block.good_word("Hello"), "hello")
