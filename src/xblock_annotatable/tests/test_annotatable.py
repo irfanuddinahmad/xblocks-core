@@ -168,8 +168,8 @@ class AnnotatableBlockTestCase(unittest.TestCase):
 
     def test_get_html_with_empty_data(self):
         """
-        A block with empty ``data`` (e.g. a bare ``<annotatable/>`` just created in a
-        content library) renders as empty content instead of raising XMLSyntaxError.
+        A block with empty ``data`` (stored by earlier releases, which parsed a bare
+        ``<annotatable/>`` to ``""``) renders as empty content instead of raising XMLSyntaxError.
         """
         for data in ("", "   \n"):
             block = self._block_with_data(data)
@@ -179,12 +179,26 @@ class AnnotatableBlockTestCase(unittest.TestCase):
 
     def test_bare_element_from_xml_renders(self):
         """
-        ``definition_from_xml`` maps a bare ``<annotatable/>`` to empty ``data``; that
-        block must still render (the content-library "create new component" flow).
+        A bare ``<annotatable/>`` (the content-library "create new component" flow, or an
+        empty element in imported OLX) must render as empty content.
         """
         definition, _children = AnnotatableBlock.definition_from_xml(etree.fromstring("<annotatable/>"), None)
         block = self._block_with_data(definition["data"])
         assert block.get_html()["content_html"] == "<div/>"
+
+    def test_bare_element_round_trips_on_export(self):
+        """
+        A bare ``<annotatable/>`` is kept as its OLX, like the built-in block (``RawMixin``),
+        so export writes it back instead of dropping the block (``definition_to_xml`` returns
+        None for empty ``data``).
+        """
+        definition, _children = AnnotatableBlock.definition_from_xml(etree.fromstring("<annotatable/>"), None)
+        assert definition["data"].strip() == "<annotatable/>"
+        block = self._block_with_data(definition["data"])
+        exported = block.definition_to_xml(None)
+        assert exported is not None
+        assert exported.tag == "annotatable"
+        assert len(exported) == 0
 
 
 class AnnotatableBlockI18nJsCatalogTest(unittest.TestCase):

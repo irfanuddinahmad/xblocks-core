@@ -154,10 +154,10 @@ class AnnotatableBlock(LegacyXmlMixin, XBlock):
         """
         Parse ``self.data`` into an element tree.
 
-        A bare ``<annotatable/>`` (e.g. a block just created in a content library) is
-        stored with empty ``data`` by ``definition_from_xml``. Treat that as an empty
-        annotatable instead of failing with ``XMLSyntaxError: Document is empty``,
-        matching the built-in block, which rendered such blocks as empty content.
+        ``definition_from_xml`` no longer produces empty ``data``, but blocks parsed by
+        earlier releases (which stored a bare ``<annotatable/>`` as ``""``) may still have
+        it. Treat that as an empty annotatable instead of failing with
+        ``XMLSyntaxError: Document is empty``.
         """
         if not (self.data or "").strip():
             return etree.Element("annotatable")
@@ -299,8 +299,8 @@ class AnnotatableBlock(LegacyXmlMixin, XBlock):
 
     @classmethod
     def definition_from_xml(cls, xml_object, system):
-        if len(xml_object) == 0 and len(list(xml_object.items())) == 0:
-            return {"data": ""}, []
+        # Store the OLX as-is, even for a bare ``<annotatable/>``. The built-in block used
+        # ``RawMixin`` (not ``EmptyDataRawMixin``), so its ``data`` was never empty.
         return {"data": etree.tostring(xml_object, pretty_print=True, encoding="unicode")}, []
 
     def definition_to_xml(self, resource_fs):
